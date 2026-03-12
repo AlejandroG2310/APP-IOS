@@ -1,24 +1,18 @@
-//
-//  ContentView.swift
-//  IOS
-//
-//  Created by Devel Cit on 12/03/26.
-//
-
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hola como estan")
-        }
-        .padding()
-    }
-}
+    @State private var isLoggedIn: Bool = UserDefaults.standard.string(forKey: "authToken") != nil
 
-#Preview {
-    ContentView()
+    var body: some View {
+        if isLoggedIn {
+            DashboardView(onLogout: {
+                isLoggedIn = false
+            })
+        } else {
+            LoginView(onLogin: { token in
+                UserDefaults.standard.set(token, forKey: "authToken")
+                isLoggedIn = true
+            })
+        }
+    }
 }
